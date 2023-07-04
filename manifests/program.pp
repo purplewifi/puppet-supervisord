@@ -131,12 +131,9 @@ define supervisord::program(
     }
   }
 
-  if ($numprocs != 1 ) {
-    $pname = "${name}:*"
-  }
-  else {
-    $pname = $name
-  }
+  # WIP: Ensure processes restart properly, this does not work and causes an error when a process is in a group.
+  #   Removed process count > 1 check, seems even single processes respond properly to this
+  $pname = "${name}:"
 
   case $ensure_process {
     'stopped': {
