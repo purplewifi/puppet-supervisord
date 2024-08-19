@@ -2,17 +2,16 @@
 #
 # This define executes command with the supervisorctl tool
 #
-define supervisord::supervisorctl(
+define supervisord::supervisorctl (
   $command,
   $process       = undef,
   $refreshonly   = false,
   $unless        = undef
 ) {
+  assert_type(String, $command)
+  assert_type(String, $process)
 
-  validate_string($command)
-  validate_string($process)
-
-  $supervisorctl = $::supervisord::executable_ctl
+  $supervisorctl = $supervisord::executable_ctl
 
   if $process {
     $cmd = join([$supervisorctl, $command, $process], ' ')
@@ -22,7 +21,7 @@ define supervisord::supervisorctl(
   }
 
   if $unless {
-    $unless_cmd = join([$supervisorctl, 'status', "${process}", '|', 'awk', '{\'print $2\'}', '|', 'grep', '-i', $unless], ' ')
+    $unless_cmd = join([$supervisorctl, 'status', $process, '|', 'awk', '{\'print $2\'}', '|', 'grep', '-i', $unless], ' ')
   }
   else {
     $unless_cmd = undef
@@ -31,6 +30,6 @@ define supervisord::supervisorctl(
   exec { "supervisorctl_command_${name}":
     command     => $cmd,
     refreshonly => $refreshonly,
-    unless      => $unless_cmd
+    unless      => $unless_cmd,
   }
 }

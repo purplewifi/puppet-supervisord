@@ -1,26 +1,9 @@
+# frozen_string_literal: true
+
+require 'bundler'
+require 'puppet_litmus/rake_tasks' if Gem.loaded_specs.key? 'puppet_litmus'
 require 'puppetlabs_spec_helper/rake_tasks'
-require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
+require 'puppet-strings/tasks' if Gem.loaded_specs.key? 'puppet-strings'
 
-PuppetLint.configuration.send('disable_quoted_booleans')
-PuppetLint.configuration.send('disable_autoloader_layout')
-
-exclude_paths = [
-  "pkg/**/*",
-  "vendor/**/*",
-  "spec/**/*",
-]
-PuppetLint.configuration.ignore_paths = exclude_paths
-PuppetSyntax.exclude_paths = exclude_paths
-
-desc "Acceptance Tests"
-RSpec::Core::RakeTask.new(:acceptance) do |t|
-  t.pattern = 'spec/acceptance'
-end
-
-desc "Test Suite"
-task :test => [
-  :lint,
-  :syntax,
-  :spec
-]
+PuppetLint.configuration.send('disable_relative')

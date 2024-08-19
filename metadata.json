@@ -1,66 +1,75 @@
 {
-    "name": "ajcrowe-supervisord",
-    "version": "0.6.1",
-    "author": "Alex Crowe",
-    "license": "MIT",
-    "summary": "Module supervisord class and functions",
-    "source": "https://github.com/ajcrowe/puppet-supervisord",
-    "project_page": "https://forge.puppetlabs.com/ajcrowe/supervisord",
-    "issues_url": "https://github.com/ajcrowe/puppet-supervisord/issues",
-    "tags": [
-        "supervisor",
-        "supervisord",
-        "python",
-        "process",
-        "management"
-    ],
-    "operatingsystem_support": [
-        {
-            "operatingsystem": "RedHat",
-            "operatingsystemrelease": [
-                "5",
-                "6",
-                "7"
-            ]
-        },
-        {
-            "operatingsystem": "CentOS",
-            "operatingsystemrelease": [
-                "5",
-                "6",
-                "7"
-            ]
-        },
-        {
-            "operatingsystem": "Ubuntu",
-            "operatingsystemrelease": [
-                "10.04",
-                "12.04",
-                "14.04",
-                "16.04",
-                "18.04",
-                "20.04",
-                "22.04",
-                "24.04"
-            ]
-        },
-        {
-            "operatingsystem": "Debian",
-            "operatingsystemrelease": [
-                "6",
-                "7",
-                "8"
-            ]
-        }
-    ],
-    "dependencies": [
-        {
-            "name": "puppetlabs/stdlib",
-            "version_requirement": ">= 4.4.0 < 10.0.0"
-        },
-        {
-            "name": "puppetlabs/concat",
-            "version_requirement": ">= 1.0.0 < 10.0.0"
-        }
-    ]
+  "name": "ajcrowe-supervisord",
+  "version": "0.6.1",
+  "author": "Alex Crowe",
+  "summary": "Module supervisord class and functions",
+  "license": "MIT",
+  "source": "https://github.com/ajcrowe/puppet-supervisord",
+  "project_page": "https://forge.puppetlabs.com/ajcrowe/supervisord",
+  "issues_url": "https://github.com/ajcrowe/puppet-supervisord/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.4.0 < 10.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.0 < 10.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "10.04",
+        "12.04",
+        "14.04",
+        "16.04",
+        "18.04",
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.24 < 9.0.0"
+    }
+  ],
+  "tags": [
+    "supervisor",
+    "supervisord",
+    "python",
+    "process",
+    "management"
+  ],
+  "pdk-version": "3.2.0",
+  "template-url": "pdk-default#3.2.0",
+  "template-ref": "tags/3.2.0-0-gb257ef1"
 }

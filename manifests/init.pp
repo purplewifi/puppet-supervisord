@@ -2,7 +2,7 @@
 #
 # This class installs supervisord via pip
 #
-class supervisord(
+class supervisord (
   $package_ensure          = $supervisord::params::package_ensure,
   $package_name            = $supervisord::params::package_name,
   $package_provider        = $supervisord::params::package_provider,
@@ -87,41 +87,40 @@ class supervisord(
   $programs             = {}
 
 ) inherits supervisord::params {
+  assert_type(Boolean, $install_pip)
+  assert_type(Boolean, $install_init)
+  assert_type(Boolean, $nodaemon)
+  assert_type(Boolean, $unix_socket)
+  assert_type(Boolean, $unix_auth)
+  assert_type(Boolean, $inet_server)
+  assert_type(Boolean, $inet_auth)
+  assert_type(Boolean, $strip_ansi)
+  assert_type(Boolean, $nocleanup)
 
-  validate_bool($install_pip)
-  validate_bool($install_init)
-  validate_bool($nodaemon)
-  validate_bool($unix_socket)
-  validate_bool($unix_auth)
-  validate_bool($inet_server)
-  validate_bool($inet_auth)
-  validate_bool($strip_ansi)
-  validate_bool($nocleanup)
+  assert_type(Hash, $eventlisteners)
+  assert_type(Hash, $fcgi_programs)
+  assert_type(Hash, $groups)
+  assert_type(Hash, $programs)
 
-  validate_hash($eventlisteners)
-  validate_hash($fcgi_programs)
-  validate_hash($groups)
-  validate_hash($programs)
-
-  validate_absolute_path($config_include)
-  validate_absolute_path($log_path)
-  validate_absolute_path($run_path)
-  if $childlogdir { validate_absolute_path($childlogdir) }
-  if $directory { validate_absolute_path($directory) }
+  assert_type(String, $config_include)
+  assert_type(String, $log_path)
+  assert_type(String, $run_path)
+  if $childlogdir { assert_type(String, $childlogdir) }
+  if $directory { assert_type(String, $directory) }
 
   $log_levels = ['^critical$', '^error$', '^warn$', '^info$', '^debug$', '^trace$', '^blather$']
-  validate_re($log_level, $log_levels, "invalid log_level: ${log_level}")
-  validate_re($logfile_maxbytes,'^[0-9]*(?:KB|MB|GB)?', "invalid logfile_maxbytes: ${$logfile_maxbytes}")
-  validate_re($umask, '^0[0-7][0-7]$', "invalid umask: ${umask}.")
-  validate_re($unix_socket_mode, '^[0-7][0-7][0-7][0-7]$', "invalid unix_socket_mode: ${unix_socket_mode}")
-  validate_re($ctl_socket, ['^unix$', '^inet$'], "invalid ctl_socket: ${ctl_socket}")
-  validate_re($config_file_mode, '^0[0-7][0-7][0-7]$')
-  if $pip_proxy { validate_re($pip_proxy, ['^https?:\/\/.*$'], "invalid pip_proxy: ${pip_proxy}") }
+  assert_type(Regexp, $log_level, $log_levels, "invalid log_level: ${log_level}")
+  assert_type(Regexp, $logfile_maxbytes,'^[0-9]*(?:KB|MB|GB)?', "invalid logfile_maxbytes: ${$logfile_maxbytes}")
+  assert_type(Regexp, $umask, '^0[0-7][0-7]$', "invalid umask: ${umask}.")
+  assert_type(Regexp, $unix_socket_mode, '^[0-7][0-7][0-7][0-7]$', "invalid unix_socket_mode: ${unix_socket_mode}")
+  assert_type(Regexp, $ctl_socket, ['^unix$', '^inet$'], "invalid ctl_socket: ${ctl_socket}")
+  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
+  if $pip_proxy { assert_type(Regexp, $pip_proxy, ['^https?:\/\/.*$'], "invalid pip_proxy: ${pip_proxy}") }
 
-  if ! is_integer($logfile_backups) { fail("invalid logfile_backups: ${logfile_backups}.")}
-  if ! is_integer($minfds) { fail("invalid minfds: ${minfds}.")}
-  if ! is_integer($minprocs) { fail("invalid minprocs: ${minprocs}.")}
-  if ! is_integer($inet_server_port) { fail("invalid inet_server_port: ${inet_server_port}.")}
+  if ! assert_type(Numeric, $logfile_backups) { fail("invalid logfile_backups: ${logfile_backups}.") }
+  if ! assert_type(Numeric, $minfds) { fail("invalid minfds: ${minfds}.") }
+  if ! assert_type(Numeric, $minprocs) { fail("invalid minprocs: ${minprocs}.") }
+  if ! assert_type(Numeric, $inet_server_port) { fail("invalid inet_server_port: ${inet_server_port}.") }
 
   if $unix_socket and $inet_server {
     $use_ctl_socket = $ctl_socket
@@ -147,34 +146,34 @@ class supervisord(
   }
 
   if $unix_auth {
-    validate_string($unix_username)
-    validate_string($unix_password)
+    assert_type(String, $unix_username)
+    assert_type(String, $unix_password)
   }
 
   if $inet_auth {
-    validate_string($inet_username)
-    validate_string($inet_password)
+    assert_type(String, $inet_username)
+    assert_type(String, $inet_password)
   }
 
   # Handle deprecated $environment variable
-  if $environment { notify {'[supervisord] *** DEPRECATED WARNING ***: $global_environment has replaced $environment':}}
+  if $environment { notify { '[supervisord] *** DEPRECATED WARNING ***: $global_environment has replaced $environment': } }
   $_global_environment = $global_environment ? {
     undef   => $environment,
     default => $global_environment
   }
 
   if $env_var {
-    validate_hash($env_var)
+    assert_type(Hash, $env_var)
     $env_hash = hiera($env_var)
     $env_string = hash2csv($env_hash)
   }
   elsif $_global_environment {
-    validate_hash($_global_environment)
+    assert_type(Hash, $_global_environment)
     $env_string = hash2csv($_global_environment)
   }
 
   if $config_dirs {
-    validate_array($config_dirs)
+    assert_type(Array, $config_dirs)
     $config_include_string = join($config_dirs, ' ')
   }
   else {
@@ -208,5 +207,4 @@ class supervisord(
   Class['supervisord::service'] -> Supervisord::Group <| |>
   Class['supervisord::service'] -> Supervisord::Rpcinterface <| |>
   Class['supervisord::reload']  -> Supervisord::Supervisorctl <| |>
-
 }

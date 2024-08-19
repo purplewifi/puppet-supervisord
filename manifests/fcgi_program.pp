@@ -5,7 +5,7 @@
 # Documentation on parameters available at:
 # http://supervisord.org/configuration.html#fcgi-program-x-section-settings
 #
-define supervisord::fcgi_program(
+define supervisord::fcgi_program (
   $command,
   $socket,
   $ensure                  = present,
@@ -46,58 +46,57 @@ define supervisord::fcgi_program(
   $serverurl               = undef,
   $config_file_mode        = '0644'
 ) {
-
   include supervisord
 
   # parameter validation
-  validate_string($command)
-  validate_re($ensure_process, ['running', 'stopped', 'removed', 'unmanaged'])
-  validate_re($socket, ['^tcp:\/\/.*:\d+$', '^unix:\/\/\/'])
-  if $cfgreload { validate_bool($cfgreload) }
-  if $process_name { validate_string($process_name) }
-  if $numprocs { if !is_integer($numprocs) { validate_re($numprocs, '^\d+')} }
-  if $numprocs_start { if !is_integer($numprocs_start) { validate_re($numprocs_start, '^\d+')} }
-  if $priority { if !is_integer($priority) { validate_re($priority, '^\d+') } }
-  if $autostart { if !is_bool($autostart) { validate_re($autostart, ['true', 'false']) } }
-  if $autorestart { if !is_bool($autorestart) { validate_re($autorestart, ['true', 'false', 'unexpected']) } }
-  if $startsecs { if !is_integer($startsecs) { validate_re($startsecs, '^\d+')} }
-  if $startretries { if !is_integer($startretries) { validate_re($startretries, '^\d+')} }
-  if $exitcodes { validate_string($exitcodes)}
-  if $stopsignal { validate_re($stopsignal, ['TERM', 'HUP', 'INT', 'QUIT', 'KILL', 'USR1', 'USR2']) }
-  if $stopwaitsecs { if !is_integer($stopwaitsecs) { validate_re($stopwaitsecs, '^\d+')} }
-  if $stopasgroup { validate_bool($stopasgroup) }
-  if $killasgroup { validate_bool($killasgroup) }
-  if $user { validate_string($user) }
-  if $redirect_stderr { validate_bool($redirect_stderr) }
-  validate_string($stdout_logfile)
-  if $stdout_logfile_maxbytes { validate_string($stdout_logfile_maxbytes) }
-  if $stdout_logfile_backups { if !is_integer($stdout_logfile_backups) { validate_re($stdout_logfile_backups, '^\d+')} }
-  if $stdout_capture_maxbytes { validate_string($stdout_capture_maxbytes) }
-  if $stdout_events_enabled { validate_bool($stdout_events_enabled) }
-  validate_string($stderr_logfile)
-  if $stderr_logfile_maxbytes { validate_string($stderr_logfile_maxbytes) }
-  if $stderr_logfile_backups { if !is_integer($stderr_logfile_backups) { validate_re($stderr_logfile_backups, '^\d+')} }
-  if $stderr_capture_maxbytes { validate_string($stderr_capture_maxbytes) }
-  if $stderr_events_enabled { validate_bool($stderr_events_enabled) }
-  if $directory { validate_absolute_path($directory) }
-  if $umask { validate_re($umask, '^[0-7][0-7][0-7]$') }
-  validate_re($config_file_mode, '^0[0-7][0-7][0-7]$')
+  assert_type(String, $command)
+  assert_type(Regexp, $ensure_process, ['running', 'stopped', 'removed', 'unmanaged'])
+  assert_type(Regexp, $socket, ['^tcp:\/\/.*:\d+$', '^unix:\/\/\/'])
+  if $cfgreload { assert_type(Boolean, $cfgreload) }
+  if $process_name { assert_type(String, $process_name) }
+  if $numprocs { if !assert_type(Numeric, $numprocs) { assert_type(Regexp, $numprocs, '^\d+') } }
+  if $numprocs_start { if !assert_type(Numeric, $numprocs_start) { assert_type(Regexp, $numprocs_start, '^\d+') } }
+  if $priority { if !assert_type(Numeric, $priority) { assert_type(Regexp, $priority, '^\d+') } }
+  if $autostart { if !assert_type(Boolean, $autostart) { assert_type(Regexp, $autostart, ['true', 'false']) } }
+  if $autorestart { if !assert_type(Boolean, $autorestart) { assert_type(Regexp, $autorestart, ['true', 'false', 'unexpected']) } }
+  if $startsecs { if !assert_type(Numeric, $startsecs) { assert_type(Regexp, $startsecs, '^\d+') } }
+  if $startretries { if !assert_type(Numeric, $startretries) { assert_type(Regexp, $startretries, '^\d+') } }
+  if $exitcodes { assert_type(String, $exitcodes) }
+  if $stopsignal { assert_type(Regexp, $stopsignal, ['TERM', 'HUP', 'INT', 'QUIT', 'KILL', 'USR1', 'USR2']) }
+  if $stopwaitsecs { if !assert_type(Numeric, $stopwaitsecs) { assert_type(Regexp, $stopwaitsecs, '^\d+') } }
+  if $stopasgroup { assert_type(Boolean, $stopasgroup) }
+  if $killasgroup { assert_type(Boolean, $killasgroup) }
+  if $user { assert_type(String, $user) }
+  if $redirect_stderr { assert_type(Boolean, $redirect_stderr) }
+  assert_type(String, $stdout_logfile)
+  if $stdout_logfile_maxbytes { assert_type(String, $stdout_logfile_maxbytes) }
+  if $stdout_logfile_backups { if !assert_type(Numeric, $stdout_logfile_backups) { assert_type(Regexp, $stdout_logfile_backups, '^\d+') } }
+  if $stdout_capture_maxbytes { assert_type(String, $stdout_capture_maxbytes) }
+  if $stdout_events_enabled { assert_type(Boolean, $stdout_events_enabled) }
+  assert_type(String, $stderr_logfile)
+  if $stderr_logfile_maxbytes { assert_type(String, $stderr_logfile_maxbytes) }
+  if $stderr_logfile_backups { if !assert_type(Numeric, $stderr_logfile_backups) { assert_type(Regexp, $stderr_logfile_backups, '^\d+') } }
+  if $stderr_capture_maxbytes { assert_type(String, $stderr_capture_maxbytes) }
+  if $stderr_events_enabled { assert_type(Boolean, $stderr_events_enabled) }
+  if $directory { assert_type(String, $directory) }
+  if $umask { assert_type(Regexp, $umask, '^[0-7][0-7][0-7]$') }
+  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
 
   # create the correct log variables
   $stdout_logfile_path = $stdout_logfile ? {
-        /(NONE|AUTO|syslog)/ => $stdout_logfile,
-        /^\//                => $stdout_logfile,
-        default              => "${supervisord::log_path}/${stdout_logfile}",
+    /(NONE|AUTO|syslog)/ => $stdout_logfile,
+    /^\//                => $stdout_logfile,
+    default              => "${supervisord::log_path}/${stdout_logfile}",
   }
 
   $stderr_logfile_path = $stderr_logfile ? {
-        /(NONE|AUTO|syslog)/ => $stderr_logfile,
-        /^\//                => $stderr_logfile,
-        default              => "${supervisord::log_path}/${stderr_logfile}",
+    /(NONE|AUTO|syslog)/ => $stderr_logfile,
+    /^\//                => $stderr_logfile,
+    default              => "${supervisord::log_path}/${stderr_logfile}",
   }
 
   # Handle deprecated $environment variable
-  if $environment { notify {'[supervisord] *** DEPRECATED WARNING ***: $program_environment has replaced $environment':}}
+  if $environment { notify { '[supervisord] *** DEPRECATED WARNING ***: $program_environment has replaced $environment': } }
   $_program_environment = $program_environment ? {
     undef   => $environment,
     default => $program_environment
@@ -106,11 +105,11 @@ define supervisord::fcgi_program(
   # convert environment data into a csv
   if $env_var {
     $env_hash = hiera_hash($env_var)
-    validate_hash($env_hash)
+    assert_type(Hash, $env_hash)
     $env_string = hash2csv($env_hash)
   }
   elsif $_program_environment {
-    validate_hash($_program_environment)
+    assert_type(Hash, $_program_environment)
     $env_string = hash2csv($_program_environment)
   }
 
@@ -139,22 +138,22 @@ define supervisord::fcgi_program(
     'stopped': {
       supervisord::supervisorctl { "stop_${name}":
         command => 'stop',
-        process => $name
+        process => $name,
       }
     }
     'removed': {
       supervisord::supervisorctl { "remove_${name}":
         command => 'remove',
-        process => $name
+        process => $name,
       }
     }
     'running': {
       supervisord::supervisorctl { "start_${name}":
         command => 'start',
         process => $name,
-        unless  => 'running'
+        unless  => 'running',
       }
     }
-    default: { }
+    default: {}
   }
 }

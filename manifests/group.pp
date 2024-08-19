@@ -11,13 +11,12 @@ define supervisord::group (
   $priority         = undef,
   $config_file_mode = '0644'
 ) {
-
   include supervisord
 
   # parameter validation
-  validate_array($programs)
-  if $priority { if !is_integer($priority) { validate_re($priority, '^\d+', "invalid priority value of: ${priority}") } }
-  validate_re($config_file_mode, '^0[0-7][0-7][0-7]$')
+  assert_type(Array, $programs)
+  if $priority { if !assert_type(Numeric, $priority) { assert_type(Regexp, $priority, '^\d+', "invalid priority value of: ${priority}") } }
+  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
 
   $progstring = array2csv($programs)
   $conf = "${supervisord::config_include}/group_${name}.conf"
@@ -27,6 +26,6 @@ define supervisord::group (
     owner   => 'root',
     mode    => $config_file_mode,
     content => template('supervisord/conf/group.erb'),
-    notify  => Class['supervisord::reload']
+    notify  => Class['supervisord::reload'],
   }
 }
