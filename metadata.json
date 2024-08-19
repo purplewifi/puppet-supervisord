@@ -39,7 +39,9 @@
                 "14.04",
                 "16.04",
                 "18.04",
-                "20.04"
+                "20.04",
+                "22.04",
+                "24.04"
             ]
         },
         {
@@ -54,11 +56,11 @@
     "dependencies": [
         {
             "name": "puppetlabs/stdlib",
-            "version_requirement": ">= 4.4.0 < 8.0.0"
+            "version_requirement": ">= 4.4.0 < 10.0.0"
         },
         {
             "name": "puppetlabs/concat",
-            "version_requirement": ">= 1.0.0 < 8.0.0"
+            "version_requirement": ">= 1.0.0 < 10.0.0"
         }
     ]
 }
