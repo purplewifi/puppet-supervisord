@@ -1,3 +1,9 @@
+2024-08-19 - v0.7.0
+
+- Updated to use latest PDK
+- Updated to use latest depdendencies
+- Modified assertions to use Class typehints
+
 2016-04-10 - v0.6.1
 
 Enhancements:
@@ -174,7 +180,7 @@ To-Do:
 
 Fixes:
 
-- Fixed large bug on debian wheezy where /var/run is changed from a symlink to a 
+- Fixed large bug on debian wheezy where /var/run is changed from a symlink to a
   directory causing all pids to be inaccessible breaking lots of services
 
 
@@ -219,4 +225,4 @@ Completed basic module functionality for
 - Install with pip
 - Configure programs
 - Configure groups
-- Install init scripts for RedHat and Debian families 
+- Install init scripts for RedHat and Debian families
