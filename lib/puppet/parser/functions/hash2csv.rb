@@ -4,7 +4,7 @@
 # $hash = {
 #   HOME   => '/home/user',
 #   ENV1   => 'env1',
-#   SECRET => 'secret'	
+#   SECRET => 'secret'
 # }
 #
 # becomes:
@@ -12,14 +12,15 @@
 # $string = "HOME='/home/user',ENV1='env1',SECRET='secret'"
 #
 module Puppet::Parser::Functions
-  newfunction(:hash2csv, :type => :rvalue, :doc => <<-'EOS'
+  newfunction(:hash2csv, type: :rvalue, doc: <<-'EOS'
     Returns a csv formatted string from an hash in the form
     KEY=VALUE,KEY2=VALUE2,KEY3=VALUE3 ordered by key
     EOS
   ) do |args|
-
-    raise(Puppet::ParseError, "hash2csv(): Wrong number of arguments " +
-      "given (#{args.size} of 1)") if args.size < 1
+    if args.size < 1
+      raise(Puppet::ParseError, 'hash2csv(): Wrong number of arguments ' +
+        "given (#{args.size} of 1)")
+    end
 
     hash = args[0]
 
@@ -30,11 +31,10 @@ module Puppet::Parser::Functions
     sorted_hash = hash.sort
     result = ''
 
-    sorted_hash.each {|key, value|
+    sorted_hash.each do |key, value|
       result += "#{key}='#{value}',"
-    }
+    end
 
     return result.chop!
-
   end
 end
