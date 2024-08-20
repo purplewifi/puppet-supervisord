@@ -108,10 +108,10 @@ class supervisord (
   if $childlogdir { assert_type(String, $childlogdir) }
   if $directory { assert_type(String, $directory) }
 
-  if ! assert_type(Numeric, $logfile_backups) { fail("invalid logfile_backups: ${logfile_backups}.") }
-  if ! assert_type(Numeric, $minfds) { fail("invalid minfds: ${minfds}.") }
-  if ! assert_type(Numeric, $minprocs) { fail("invalid minprocs: ${minprocs}.") }
-  if ! assert_type(Numeric, $inet_server_port) { fail("invalid inet_server_port: ${inet_server_port}.") }
+  if ! assert_type(String, $logfile_backups) { fail("invalid logfile_backups: ${logfile_backups}.") }
+  if ! assert_type(String, $minfds) { fail("invalid minfds: ${minfds}.") }
+  if ! assert_type(String, $minprocs) { fail("invalid minprocs: ${minprocs}.") }
+  if ! assert_type(String, $inet_server_port) { fail("invalid inet_server_port: ${inet_server_port}.") }
 
   if $unix_socket and $inet_server {
     $use_ctl_socket = $ctl_socket
