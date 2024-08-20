@@ -15,8 +15,6 @@ define supervisord::group (
 
   # parameter validation
   assert_type(Array, $programs)
-  if $priority { if !assert_type(Numeric, $priority) { assert_type(Regexp, $priority, '^\d+', "invalid priority value of: ${priority}") } }
-  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
 
   $progstring = array2csv($programs)
   $conf = "${supervisord::config_include}/group_${name}.conf"

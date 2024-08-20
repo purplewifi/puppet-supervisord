@@ -30,7 +30,7 @@ class supervisord (
 
   $log_path                = $supervisord::params::log_path,
   $log_file                = $supervisord::params::log_file,
-  $log_level               = $supervisord::params::log_level,
+  Optional[Enum['critical', 'error', 'warn', 'info', 'debug', 'trace', 'blather']] $log_level               = $supervisord::params::log_level,
   $logfile_maxbytes        = $supervisord::params::logfile_maxbytes,
   $logfile_backups         = $supervisord::params::logfile_backups,
 
@@ -107,15 +107,6 @@ class supervisord (
   assert_type(String, $run_path)
   if $childlogdir { assert_type(String, $childlogdir) }
   if $directory { assert_type(String, $directory) }
-
-  $log_levels = ['^critical$', '^error$', '^warn$', '^info$', '^debug$', '^trace$', '^blather$']
-  assert_type(Regexp, $log_level, $log_levels, "invalid log_level: ${log_level}")
-  assert_type(Regexp, $logfile_maxbytes,'^[0-9]*(?:KB|MB|GB)?', "invalid logfile_maxbytes: ${$logfile_maxbytes}")
-  assert_type(Regexp, $umask, '^0[0-7][0-7]$', "invalid umask: ${umask}.")
-  assert_type(Regexp, $unix_socket_mode, '^[0-7][0-7][0-7][0-7]$', "invalid unix_socket_mode: ${unix_socket_mode}")
-  assert_type(Regexp, $ctl_socket, ['^unix$', '^inet$'], "invalid ctl_socket: ${ctl_socket}")
-  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
-  if $pip_proxy { assert_type(Regexp, $pip_proxy, ['^https?:\/\/.*$'], "invalid pip_proxy: ${pip_proxy}") }
 
   if ! assert_type(Numeric, $logfile_backups) { fail("invalid logfile_backups: ${logfile_backups}.") }
   if ! assert_type(Numeric, $minfds) { fail("invalid minfds: ${minfds}.") }

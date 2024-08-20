@@ -47,37 +47,22 @@ define supervisord::program (
 
 # parameter validation
   assert_type(String, $command)
-  assert_type(Regexp, $ensure_process, ['running', 'stopped', 'removed', 'unmanaged'])
   if $cfgreload { assert_type(Boolean, $cfgreload) }
   if $process_name { assert_type(String, $process_name) }
-  if $numprocs { if !assert_type(Numeric, $numprocs) { assert_type(Regexp, $numprocs, '^\d+') } }
-  if $numprocs_start { if !assert_type(Numeric, $numprocs_start) { assert_type(Regexp, $numprocs_start, '^\d+') } }
-  if $priority { if !assert_type(Numeric, $priority) { assert_type(Regexp, $priority, '^\d+') } }
-  if $autostart { if !assert_type(Boolean, $autostart) { assert_type(Regexp, $autostart, ['true', 'false']) } }
-  if $autorestart { if !assert_type(Boolean, $autorestart) { assert_type(Regexp, $autorestart, ['true', 'false', 'unexpected']) } }
-  if $startsecs { if !assert_type(Numeric, $startsecs) { assert_type(Regexp, $startsecs, '^\d+') } }
-  if $startretries { if !assert_type(Numeric, $startretries) { assert_type(Regexp, $startretries, '^\d+') } }
   if $exitcodes { assert_type(String, $exitcodes) }
-  if $stopsignal { assert_type(Regexp, $stopsignal, ['TERM', 'HUP', 'INT', 'QUIT', 'KILL', 'USR1', 'USR2']) }
-  if $stopwaitsecs { if !assert_type(Numeric, $stopwaitsecs) { assert_type(Regexp, $stopwaitsecs, '^\d+') } }
   if $stopasgroup { assert_type(Boolean, $stopasgroup) }
   if $killasgroup { assert_type(Boolean, $killasgroup) }
   if $user { assert_type(String, $user) }
   if $redirect_stderr { assert_type(Boolean, $redirect_stderr) }
   assert_type(String, $stdout_logfile)
   if $stdout_logfile_maxbytes { assert_type(String, $stdout_logfile_maxbytes) }
-  if $stdout_logfile_backups { if !assert_type(Numeric, $stdout_logfile_backups) { assert_type(Regexp, $stdout_logfile_backups, '^\d+') } }
   if $stdout_capture_maxbytes { assert_type(String, $stdout_capture_maxbytes) }
   if $stdout_events_enabled { assert_type(Boolean, $stdout_events_enabled) }
   assert_type(String, $stderr_logfile)
   if $stderr_logfile_maxbytes { assert_type(String, $stderr_logfile_maxbytes) }
-  if $stderr_logfile_backups { if !assert_type(Numeric, $stderr_logfile_backups) { assert_type(Regexp, $stderr_logfile_backups, '^\d+') } }
   if $stderr_capture_maxbytes { assert_type(String, $stderr_capture_maxbytes) }
   if $stderr_events_enabled { assert_type(Boolean, $stderr_events_enabled) }
   if $directory { assert_type(String, $directory) }
-  if $umask { assert_type(Regexp, $umask, '^[0-7][0-7][0-7]$') }
-  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
-
   # create the correct log variables
   $stdout_logfile_path = $stdout_logfile ? {
     /(NONE|AUTO|syslog)/ => $stdout_logfile,

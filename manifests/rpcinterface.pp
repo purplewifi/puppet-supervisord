@@ -15,8 +15,6 @@ define supervisord::rpcinterface (
   include supervisord
 
   # parameter validation
-  if $retries { if !assert_type(Numeric, $retries) { assert_type(Regexp, $retries, '^\d+') } }
-  assert_type(Regexp, $config_file_mode, '^0[0-7][0-7][0-7]$')
   if $cfgreload { assert_type(Boolean, $cfgreload) }
 
   # Reload default with override
